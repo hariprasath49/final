@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+		<!-- Form_view -->
+		<record id="material_request_form_view" model="ir.ui.view">
+			<field name="name">Material Request</field>
+			<field name="model">material.request</field>
+			<field name="arch" type="xml">
+				<form string="Material Request">
+					<header>
+						<field name="state" widget="statusbar" />
+						<button type="object" name="issue_product" string="Issue Product" class="oe_highlight"/>
+					</header>
+					<sheet>
+						<div class="oe_title">
+                        	<h1>
+								<field name="name"/>
+							</h1>
+						</div>
+						<group>
+							<field name="requester_name"/>
+							<field name="date_of_request"/>
+						</group>
+						<notebook>
+                        	<page string="Product">
+								<field name="product_ids">
+									<tree editable="bottom">
+										<field name="product_id"/>
+										<field name="product_uom_qty"/>
+										<field name="product_uom"/>
+										<field name="location_id"/>
+									</tree>
+								</field>
+							</page>
+							<page string="Additional Info">
+								<group>
+									<field name="move_type"/>
+									<field name="picking_type_id"/>
+								</group>
+							</page>
+						</notebook>
+					</sheet>
+				</form>
+			</field>
+		</record>
+		<!-- Form -->
+		<!-- Tree_view -->
+		<record id="material_request_list" model="ir.ui.view">
+			<field name="name">Material Request</field>
+			<field name="model">material.request</field>
+			<field name="arch" type="xml">
+				<tree>
+					<field name="requester_name"/>
+					<field name="date_of_request"/>
+				</tree>
+			</field>
+		</record>
+		<!-- Tree -->
+		<!-- Action_view -->
+		<record id="material_request_action" model="ir.actions.act_window">
+			<field name="name">Material Request</field>
+			<field name="res_model">material.request</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form</field>
+			<field name="view_id" ref="material_request_list" />
+		</record>
+		<!-- Action -->
+		<menuitem id="material_request_menu" name="Material Request" parent="stock.menu_stock_root" action="material_request_action" sequence="1"/>
+      	
+      	<!-- Form_view Stock Picking-->
+		<record id="stock_picking_form_view_inherit" model="ir.ui.view">
+			<field name="name">Stock Picking</field>
+			<field name="model">stock.picking</field>
+			<field name="inherit_id" ref="stock.view_picking_form"/>
+			<field name="arch" type="xml">
+				<header>
+					<xpath expr="//button[@name='do_new_transfer']" position="after">
+               			<button name="state_transfer" string="Transfer" type="object" class="oe_highlight"/>
+         			</xpath>
+				</header>
+				<field name="state" position="attributes">
+    				<attribute name="statusbar_visible">draft,cancel,assigned,transfer,done</attribute>
+				</field>
+			</field>
+		</record>
+		<!-- Form -->
+		
+		<!-- Form_view MRP Production-->
+		<record id="mrp_productions_form_view_inherit" model="ir.ui.view">
+			<field name="name">Manufacturing Orders</field>
+			<field name="model">mrp.production</field>
+			<field name="inherit_id" ref="mrp.mrp_production_form_view"/>
+			<field name="arch" type="xml">
+				
+				<xpath expr="/form/sheet/div[@name='button_box']" position="inside">
+					
+					<button class="oe_stat_button" name="action_create_mo" string="Create MO" type="object" icon="fa-desktop">
+<!--             			<field name="po_count" widget="statinfo" />    -->
+            		</button>
+            		<button class="oe_stat_button" name="action_related_mo" string="View MO" type="object" icon="fa-desktop">
+<!--             			<field name="po_count" widget="statinfo" />    -->
+            		</button>
+        		</xpath>
+        		<field name="origin" position="after">
+        			<field name="picking_type_id"/>
+        		</field>
+				
+				
+				
+			</field>
+		</record>
+		<!-- Form -->
+      	
+	</data>
+</odoo> 
